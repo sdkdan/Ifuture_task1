@@ -1,15 +1,13 @@
 package sample;
 
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class Controller {
 
@@ -81,8 +79,6 @@ public class Controller {
         }
     }
 
-    public void displayFile(MouseEvent mouseEvent) {
-    }
 
     public void displayFileToTab(String path, TextArea textArea) {
         try {
@@ -101,4 +97,29 @@ public class Controller {
             e.printStackTrace();
         }
     }
+
+
+    private class FinderService extends Service<Finder>{
+        public Task<Finder> createTask(){
+            return new Task<Finder>() {
+                @Override
+                protected Finder call() throws Exception {
+                    return null; //вызов метода
+                }
+
+                @Override
+                protected void succeeded() {
+                    //weather.getValue
+                    //settext
+                }
+
+                @Override
+                protected void failed() {
+                    super.failed();
+                }
+            };
+        }
+    }
 }
+
+
