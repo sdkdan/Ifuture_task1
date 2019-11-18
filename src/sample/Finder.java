@@ -110,7 +110,7 @@ public class Finder {
                     if (s.contains(str)) {
                         i--;
                         counter++;
-                        System.out.println("slovo naideno " + str);
+                        System.out.println("слово найдено " + str);
 
                     } else i--;
                 }

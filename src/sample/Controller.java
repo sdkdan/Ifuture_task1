@@ -2,9 +2,7 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.*;
@@ -27,9 +25,13 @@ public class Controller {
     private TextArea textArea5;  // для вывода файла
     @FXML
     private ListView listView1; // для вывода файлов с найденным текстом
+    @FXML
+    private TabPane tabPane;
+
+
+    private SingleSelectionModel<Tab> singleSelectionModel;
 
     public void initialize() {
-
     }
 
 
@@ -49,23 +51,28 @@ public class Controller {
         }
 
         listView1.getItems().addAll(fileList);
-        listView1.setOnMouseClicked(event1 ->{
-        String selectedFile = listView1.getSelectionModel().getSelectedItems().toString();
-        String str = selectedFile.substring(1,selectedFile.length()-1);
-            displayFile(str);});
-        //int selectedFileId = Integer.parseInt(listView1.getSelectionModel().getSelectedIndices().toString());
+        listView1.setOnMouseClicked(event1 -> {
+            String selectedFile = listView1.getSelectionModel().getSelectedItems().toString();
+            String str = selectedFile.substring(1, selectedFile.length() - 1);
+            displayFile(str);
+            TextArea textArea = new TextArea();
+            Tab tab = new Tab(str, textArea);
+            displayFileToTab(str, textArea);
+            tab.setClosable(true);
+            tabPane.getTabs().add(tab);
+            tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+        });
 
-        //listView1.getOnMouseClicked();
     }
+
 
     public void displayFile(String path) {
         try {
             FileReader reader = new FileReader(new File(path));
             BufferedReader br = new BufferedReader(reader);// обычно используем этот
-            BufferedReader reader1 = new BufferedReader(new InputStreamReader(new FileInputStream(path),"Cp866")); //пробовал менять кодировки
-
+            BufferedReader reader1 = new BufferedReader(new InputStreamReader(new FileInputStream(path), "Cp866")); //пробовал менять кодировки
             String s;
-            while (( s = reader1.readLine()) != null) {
+            while ((s = reader1.readLine()) != null) {
                 textArea5.appendText(s + '\n');
                 //System.out.println(s);
             }
@@ -75,5 +82,23 @@ public class Controller {
     }
 
     public void displayFile(MouseEvent mouseEvent) {
+    }
+
+    public void displayFileToTab(String path, TextArea textArea) {
+        try {
+            FileReader reader = new FileReader(new File(path));
+            BufferedReader br = new BufferedReader(reader);// обычно используем этот
+            BufferedReader reader1 = new BufferedReader(new InputStreamReader(new FileInputStream(path), "Cp866")); //пробовал менять кодировки
+            StringBuilder string = null;
+            String s;
+            while ((s = reader1.readLine()) != null) {
+//                stringBuilder.append(s+'\n');
+                //System.out.println(s);
+                textArea.appendText(s + '\n');
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
