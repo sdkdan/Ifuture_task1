@@ -13,7 +13,7 @@ public class Main extends Application {
 
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) { // /Users/daniilstoletov/Desktop
         try {
             Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
             primaryStage.setTitle("My Application");

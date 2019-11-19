@@ -5,6 +5,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +15,15 @@ public class Controller {
     @FXML
     private Button button1;
     @FXML
-    private TextArea textArea1; //расширение
+    private TextArea extensionArea; //расширение
     @FXML
-    private TextArea textArea2; //директория
+    private TextArea pathArea; //директория
     @FXML
-    private TextArea textArea3; //текст для поиска
+    private TextArea searchArea; //текст для поиска
     @FXML
-    private TextArea textArea5;  // для вывода файла
+    private TextArea outputText;  // для вывода файла
     @FXML
-    private ListView listView1; // для вывода файлов с найденным текстом
+    private ListView textToTab; // для вывода файлов с найденным текстом
     @FXML
     private TabPane tabPane;
 
@@ -35,9 +36,9 @@ public class Controller {
 
     public void searchText(ActionEvent event) {
         Finder finder = new Finder();
-        String extension = textArea1.getText();
-        String path = textArea2.getText();
-        String textToSearch = textArea3.getText();
+        String extension = extensionArea.getText();
+        String path = pathArea.getText();
+        String textToSearch = searchArea.getText();
         List<String> listWordsToFind = finder.strToList(textToSearch);
         List<String> list = finder.fileList(path, extension);
         List<String> fileList = new ArrayList<>();
@@ -48,9 +49,9 @@ public class Controller {
             }
         }
 
-        listView1.getItems().addAll(fileList);
-        listView1.setOnMouseClicked(event1 -> {
-            String selectedFile = listView1.getSelectionModel().getSelectedItems().toString();
+        textToTab.getItems().addAll(fileList);
+        textToTab.setOnMouseClicked(event1 -> {
+            String selectedFile = textToTab.getSelectionModel().getSelectedItems().toString();
             String str = selectedFile.substring(1, selectedFile.length() - 1);
             displayFile(str);
             TextArea textArea = new TextArea();
@@ -71,7 +72,7 @@ public class Controller {
             BufferedReader reader1 = new BufferedReader(new InputStreamReader(new FileInputStream(path), "Cp866")); //пробовал менять кодировки
             String s;
             while ((s = reader1.readLine()) != null) {
-                textArea5.appendText(s + '\n');
+                outputText.appendText(s + '\n');
                 //System.out.println(s);
             }
         } catch (Exception e) {
@@ -99,8 +100,8 @@ public class Controller {
     }
 
 
-    private class FinderService extends Service<Finder>{
-        public Task<Finder> createTask(){
+    private class FinderService extends Service<Finder> {
+        public Task<Finder> createTask() {
             return new Task<Finder>() {
                 @Override
                 protected Finder call() throws Exception {

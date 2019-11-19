@@ -30,8 +30,9 @@ public class Finder {
         try {
             FileReader reader = new FileReader(new File(pathName));
             BufferedReader br = new BufferedReader(reader);
+            BufferedReader reader1 = new BufferedReader(new InputStreamReader(new FileInputStream(pathName)));
             while (i > 0) {
-                while ((s = br.readLine()) != null) {
+                while ((s = reader1.readLine()) != null) {
                     for (String str : wordsToFind
                     ) {
                         if (s.contains(str)) {
