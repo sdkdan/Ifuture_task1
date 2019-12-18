@@ -10,6 +10,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static sample.History.filesFounded;
+import static sample.History.wordsSearched;
+
 public class Controller {
 
     @FXML
@@ -26,6 +29,11 @@ public class Controller {
     private ListView textToTab; // для вывода файлов с найденным текстом
     @FXML
     private TabPane tabPane;
+    @FXML
+    private TextArea hsWords;
+    @FXML
+    private TextArea hsFiles;
+
 
 
     private SingleSelectionModel<Tab> singleSelectionModel;
@@ -36,16 +44,20 @@ public class Controller {
 
     public void searchText(ActionEvent event) {
         Finder finder = new Finder();
+        History history = new History();
         String extension = extensionArea.getText();
         String path = pathArea.getText();
         String textToSearch = searchArea.getText();
+        wordsSearched.add(textToSearch);
         List<String> listWordsToFind = finder.strToList(textToSearch);
         List<String> list = finder.fileList(path, extension);
-        List<String> fileList = new ArrayList<>();
+        List<String> fileList = new ArrayList<>();  //список файлов с найденным текстом
         for (String s : list
         ) {
             if (finder.wordFound(listWordsToFind, s)) {
                 fileList.add(s);
+                filesFounded.add(s);
+
             }
         }
 
@@ -61,6 +73,15 @@ public class Controller {
             tabPane.getTabs().add(tab);
             tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         });
+
+        for (String s: wordsSearched
+             ) {
+            hsWords.appendText(s);
+        }
+        for (String s: filesFounded
+        ) {
+            hsFiles.appendText(s);
+        }
 
     }
 
@@ -85,13 +106,14 @@ public class Controller {
         try {
             FileReader reader = new FileReader(new File(path));
             BufferedReader br = new BufferedReader(reader);// обычно используем этот
-            BufferedReader reader1 = new BufferedReader(new InputStreamReader(new FileInputStream(path), "Cp866")); //пробовал менять кодировки
+            BufferedReader reader1 = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8")); //пробовал менять кодировки
             StringBuilder string = null;
             String s;
             while ((s = reader1.readLine()) != null) {
 //                stringBuilder.append(s+'\n');
                 //System.out.println(s);
                 textArea.appendText(s + '\n');
+                System.out.println(s);
 
             }
         } catch (Exception e) {
